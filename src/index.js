@@ -47,6 +47,8 @@ const serviceBalance = async (service) => {
 
     // Scale down the service
     await scale(service, service.data.Spec.Mode.Replicated.Replicas - 1)
+  } else {
+    debug(`No containers running with service ${service.data.Spec.Name}`)
   }
 }
 
