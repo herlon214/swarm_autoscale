@@ -1,0 +1,5 @@
+#!/bin/bash
+
+docker-compose --file=docker/compose.dev.yml up -d
+docker exec -it swarm_autoscale bash
+docker-compose --file=docker/compose.dev.yml down
