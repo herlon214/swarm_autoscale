@@ -49,6 +49,8 @@ const serviceBalance = async (service) => {
     await scale(service, service.data.Spec.Mode.Replicated.Replicas - 1)
   } else {
     debug(`No containers running with service ${service.data.Spec.Name}`)
+    const nodes = await docker.node.list()
+    console.log(nodes)
   }
 }
 
