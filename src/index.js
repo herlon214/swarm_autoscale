@@ -13,9 +13,27 @@ const scale = async (service, replicas) => {
   return service.update(data)
 }
 
+const mergeContainers = async (connections) => {
+  return new Promise(async (resolve, reject) => {
+    let total = 0
+    let results = []
+
+    connections.forEach(async (connection) => {
+      let result = await connection.container.list()
+      results = results.concat(result)
+      total++
+      if (total === connections.length) {
+        resolve(results)
+      }
+    })
+  })
+}
+
 const getContainers = async (service) => {
+  let nodes = await docker.node.list()
+  nodes = nodes.map((node) => new Docker({ host: node.data.Status.Addr, port: '2375' }))
   const img = service.data.Spec.TaskTemplate.ContainerSpec.Image
-  const containers = await docker.container.list()
+  let containers = await mergeContainers(nodes)
 
   return containers.filter((container) => container.data.Image === img)
 }
