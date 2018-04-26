@@ -50,7 +50,11 @@ const serviceBalance = async (service) => {
   } else {
     debug(`No containers running with service ${service.data.Spec.Name}`)
     const nodes = await docker.node.list()
-    console.log(nodes)
+    
+    debug(`Available nodes:`)
+    nodes.forEach((node) => {
+      debug(node.data.Status)
+    })
   }
 }
 
